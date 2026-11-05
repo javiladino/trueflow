@@ -15,6 +15,8 @@ Restricción: nada facturable en AWS sin confirmación explícita (CLAUDE.md §1
 
 ## Journal (newest first)
 
+**2026-11-05 (4):** `working/proposal.md` con 3 propuestas (AWS completo / lakehouse Athena / local-first); recomendada P1. Pendiente la elección del usuario.
+
 **2026-11-05 (3):** Respuestas del usuario en research §15: presupuesto de 25 USD/mes, versiones estables consultadas, checks de CI obligatorios. Pendientes los datos de la cuenta AWS.
 
 **2026-11-05 (2):** Research de M0 añadido a `working/research.md` §7–14: ninguno de los cinco componentes existe; el repo usa `sub` OIDC inmutable; locking DynamoDB deprecado; Budgets gratis. Pendiente 🚦 del usuario.
@@ -25,4 +27,5 @@ Restricción: nada facturable en AWS sin confirmación explícita (CLAUDE.md §1
 
 | File | Role | Load | What it holds |
 |------|------|------|---------------|
+| `working/proposal.md` | draft | always | 3 propuestas de arquitectura bajo 25 USD/mes y Free plan; recomendación y Decision |
 | `working/research.md` | draft | always | Mapeo general (§1–6) y estado de los cimientos de M0 con docs oficiales (§7–14) |

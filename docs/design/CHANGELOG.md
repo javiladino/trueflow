@@ -4,6 +4,9 @@ Newest first. One `##` heading per day with activity. Write outcomes, not implem
 
 ## 2026-11-05
 
+### m0-foundations — propose
+- 3 propuestas: P1 AWS completo con disciplina de coste (recomendada), P2 lakehouse Athena/Iceberg, P3 local-first. Hallazgo: Kinesis no está en el Free Tier y el Free plan cierra la cuenta a los 6 meses.
+
 ### m0-foundations — research
 - Research de M0: nada de tooling/CI/Terraform/Budgets existe aún; el repo emite `sub` OIDC con IDs inmutables; S3 `use_lockfile` sustituye a DynamoDB (deprecado).
 
