@@ -23,9 +23,9 @@ Load by task, not all at once.
 **Load order:** this file → `<topic>/context.md` of the active topic → the files its document map marks `always` → only the files the task names. Never load `CHANGELOG.md`, `evidence/`, `archive/`, or a whole folder unless the task names the file.
 **Active topics:** ninguno todavía.
 
-**Current state (2026-11-05):** Repo git inicializado en `main` sin commits; `.gitignore` y symlink `.claude/skills → ../skills` creados; `docs/design/` arrancado. Solo existe la propuesta (`CLAUDE.md`) y las skills; ningún código de §4. Mapeo inicial en `docs/RESEARCH.md` (fuera de esta raíz).
+**Current state (2026-11-05):** Rama `feat/000-bootstrap` con commit de arranque; README del proyecto y diagramas Mermaid de arquitectura y flujo de datos en `docs/architecture/`. Solo propuesta, sin código de §4. Mapeo inicial en `docs/RESEARCH.md` (fuera de esta raíz).
 
-**Next up:** primer commit en rama `feat/000-bootstrap`; abrir el primer topic (M0).
+**Next up:** revisar diagramas; merge a `main`; abrir el primer topic (M0).
 **Known issues:** Go, Terraform y AWS CLI no instalados en local; Python del sistema 3.9.6 (se pide 3.12).
 
 ## Conventions

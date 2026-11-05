@@ -29,3 +29,5 @@ con dbt, dashboards y módulo de IA. Proyecto portfolio para entrevista de Data 
 |-------|----------|------|
 | — | Agent context | [CONTEXT.md](CONTEXT.md) |
 | — | Changelog | [CHANGELOG.md](CHANGELOG.md) |
+| — | Arquitectura (Mermaid) | [architecture.md](../architecture/architecture.md) |
+| — | Flujo de datos (Mermaid) | [data-flow.md](../architecture/data-flow.md) |

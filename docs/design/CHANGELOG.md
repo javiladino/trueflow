@@ -4,6 +4,12 @@ Newest first. One `##` heading per day with activity. Write outcomes, not implem
 
 ## 2026-11-05
 
+### bootstrap — README y diagramas
+- README del proyecto; diagramas Mermaid de arquitectura (componentes AWS) y flujo de datos (linaje por capas, secuencias evento/batch, controles RGPD), validados con mermaid-cli.
+
+### Files (trueflow, branch feat/000-bootstrap)
+- `README.md`, `docs/architecture/architecture.md`, `docs/architecture/data-flow.md` (new)
+
 ### bootstrap — arranque de repo y memoria de diseño
 - Research inicial de la propuesta en `docs/RESEARCH.md`.
 - Decidido: la raíz de diseño es `docs/design/` (ver CONTEXT § Conventions).
