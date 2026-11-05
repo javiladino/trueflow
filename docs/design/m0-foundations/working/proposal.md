@@ -130,6 +130,10 @@ En AWS solo queda lo barato y demostrable: API Gateway, el Lambda collector, S3,
 - **P3 — RGPD:** borrar en Parquet de S3 exige reescribir ficheros, sin MERGE; es el escenario más frágil para el DAG de supresión.
 - **Todas — cuenta:** en el Free plan la cuenta se cierra a los 6 meses, así que las tres necesitan pasar a Paid plan antes de terminar el roadmap (M7).
 
+### Respuestas del usuario (grill-me)
+
+- Plan de la cuenta AWS → seguir en Free plan (decisión del usuario, 2026-11-05). Consecuencia: P1 queda descartada porque Kinesis Data Streams no está en el Free Tier y la prueba de Redshift "is not part of the AWS Free Tier"; quedan P2 (si Athena y Firehose están permitidos) y P3. La cuenta se cierra en 6 meses como máximo.
+
 ## Recommendation
 
 | Criteria | P1 AWS completo | P2 Lakehouse | P3 Local-first |
@@ -147,7 +151,9 @@ En AWS solo queda lo barato y demostrable: API Gateway, el Lambda collector, S3,
 - **Elegir P3** solo si se quiere una demo mínima y rápida.
 - **Gaps comunes:** precios de eu-west-3 sin verificar; la lista de servicios del Free plan no cargó; las tres necesitan Paid plan antes de 6 meses.
 
-**Recomendación: Proposal 1**, con Kinesis detrás de `enable_streaming` (apagado por defecto) y la prueba de Redshift activada al empezar M1. Es la única sin impacto en las fases posteriores y con el relato completo de la entrevista. El presupuesto de 25 USD se protege con el budget de M0 y con el crédito de 170 USD, que se conserva al pasar a Paid plan.
+**Recomendación inicial (antes de la respuesta del usuario): Proposal 1**, con Kinesis detrás de `enable_streaming` (apagado por defecto) y la prueba de Redshift activada al empezar M1. Es la única sin impacto en las fases posteriores y con el relato completo de la entrevista. El presupuesto de 25 USD se protege con el budget de M0 y con el crédito de 170 USD, que se conserva al pasar a Paid plan.
+
+**Recomendación revisada tras seguir en Free plan: Proposal 3**, porque solo usa servicios básicos (Lambda, API Gateway, S3), que es lo que con más probabilidad permite el Free plan. P2 solo si se confirma en la consola que Athena y Firehose están disponibles.
 
 ## Decision
 
