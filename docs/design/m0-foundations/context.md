@@ -15,6 +15,8 @@ Restricción: nada facturable en AWS sin confirmación explícita (CLAUDE.md §1
 
 ## Journal (newest first)
 
+**2026-11-05 (3):** Respuestas del usuario en research §15: presupuesto de 25 USD/mes, versiones estables consultadas, checks de CI obligatorios. Pendientes los datos de la cuenta AWS.
+
 **2026-11-05 (2):** Research de M0 añadido a `working/research.md` §7–14: ninguno de los cinco componentes existe; el repo usa `sub` OIDC inmutable; locking DynamoDB deprecado; Budgets gratis. Pendiente 🚦 del usuario.
 
 **2026-11-05:** Topic abierto. El mapeo inicial de la propuesta (antes `docs/RESEARCH.md`) pasa a `working/research.md`; aún no cubre las decisiones propias de M0. `main` protegida (PR obligatorio, historia lineal).

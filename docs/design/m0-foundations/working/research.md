@@ -265,3 +265,35 @@ y `checkov` está en la CI pero no en `make lint`. Las fuentes oficiales se leye
 2. Límite mensual del presupuesto y email de las alertas.
 3. ¿Se fija una versión de Terraform (`required_version`) y de Go concretas?
 4. ¿Se añaden status checks obligatorios a `main` cuando exista la CI?
+
+## 15. Respuestas del usuario (2026-11-05)
+
+1. **Cuenta AWS:** existe una cuenta en el plan gratuito. Pendiente: los datos para el bootstrap (ver chat).
+2. **Presupuesto:** límite mensual de **25 USD**, con alertas a un email que ha facilitado el usuario. El repo es
+   público, así que el email no se escribe en ficheros versionados: va en un `*.tfvars` local, que está en el
+   `.gitignore`, o en una variable de GitHub.
+3. **Versiones:** "las más estables y útiles". Consultadas el 2026-11-05 en las fuentes oficiales
+   (go.dev/dl, checkpoint-api.hashicorp.com, registry.terraform.io, PyPI, GitHub releases, endoflife.date):
+
+| Herramienta | Última estable | Restricción observada |
+|---|---|---|
+| Python | 3.12.16 (3.13.18 y 3.14.10 también disponibles) | CLAUDE.md:99 fija 3.12; la rama 3.12 solo recibe parches de seguridad y tiene EOL el 2028-10-31 |
+| Go | 1.27.3 (1.26.10 sigue con soporte) | — |
+| Terraform | 1.17.1 | — |
+| Provider hashicorp/aws | 6.72.0 | — |
+| tflint | v0.65.0 | — |
+| checkov | 3.4.3 | — |
+| golangci-lint | v2.15.0 | — |
+| pre-commit | 4.7.0 | — |
+| ruff | 0.17.3 | — |
+| mypy | 2.4.1 | — |
+| pytest | 9.2.0 | — |
+| sqlfluff | 4.5.0 | — |
+| dbt-core | 1.12.6 (el local es 1.10.23) | Python ≥ 3.10 |
+| dbt-redshift | 1.11.2 | `dbt-core<2.0,>=1.8.0b3`, `dbt-adapters>=1.24.1`; Python ≥ 3.10 |
+| apache-airflow | 3.3.2 | Python 3.10–3.14 (`!=3.15`) |
+| Metabase | v0.65.2 | — |
+
+   Las versiones de dbt-core y dbt-redshift no coinciden en el minor; desde dbt 1.8 los adapters se publican
+   por separado y los requisitos de dbt-redshift admiten dbt-core 1.12.
+4. **Status checks obligatorios en `main`:** sí, en cuanto exista la CI. Hoy no hay ningún check que registrar.
