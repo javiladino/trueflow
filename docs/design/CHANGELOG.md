@@ -4,6 +4,9 @@ Newest first. One `##` heading per day with activity. Write outcomes, not implem
 
 ## 2026-11-05
 
+### m0-foundations — research
+- Research de M0: nada de tooling/CI/Terraform/Budgets existe aún; el repo emite `sub` OIDC con IDs inmutables; S3 `use_lockfile` sustituye a DynamoDB (deprecado).
+
 ### m0-foundations — topic abierto
 - Repo público en GitHub; `main` protegida; rama bootstrap borrada tras el merge.
 - Research inicial movido de `docs/RESEARCH.md` a `m0-foundations/working/research.md`.

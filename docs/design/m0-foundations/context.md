@@ -15,10 +15,12 @@ Restricción: nada facturable en AWS sin confirmación explícita (CLAUDE.md §1
 
 ## Journal (newest first)
 
+**2026-11-05 (2):** Research de M0 añadido a `working/research.md` §7–14: ninguno de los cinco componentes existe; el repo usa `sub` OIDC inmutable; locking DynamoDB deprecado; Budgets gratis. Pendiente 🚦 del usuario.
+
 **2026-11-05:** Topic abierto. El mapeo inicial de la propuesta (antes `docs/RESEARCH.md`) pasa a `working/research.md`; aún no cubre las decisiones propias de M0. `main` protegida (PR obligatorio, historia lineal).
 
 ## Document map
 
 | File | Role | Load | What it holds |
 |------|------|------|---------------|
-| `working/research.md` | draft | always | Mapeo de arquitectura, datos, tooling local e inconsistencias de CLAUDE.md |
+| `working/research.md` | draft | always | Mapeo general (§1–6) y estado de los cimientos de M0 con docs oficiales (§7–14) |
