@@ -14,7 +14,7 @@ con dbt, dashboards y módulo de IA. Proyecto portfolio para entrevista de Data 
 
 | Phase | Outcome | Status |
 |-------|---------|--------|
-| **M0** — Arranque | Tooling, pre-commit, CI, backend Terraform, alarma de presupuesto | Planned - no topic |
+| **M0** — Arranque | Tooling, pre-commit, CI, backend Terraform, alarma de presupuesto | In progress |
 | **M1** — Ingesta batch | DATAtourisme + DVF → S3 → Redshift raw → staging dbt | Planned - no topic |
 | **M2** — Tracking + collector | Tracking plan, collector Go, Kinesis/Firehose, DLQ | Planned - no topic |
 | **M3** — Orquestación y marts | DAGs Airflow, dbt build, calidad, marts | Planned - no topic |
@@ -22,6 +22,12 @@ con dbt, dashboards y módulo de IA. Proyecto portfolio para entrevista de Data 
 | **M5** — Observabilidad | Datadog como código, mart de SLOs, runbooks | Planned - no topic |
 | **M6** — RGPD | Seudonimización, DAG de supresión, retención | Planned - no topic |
 | **M7** — IA | Enriquecimiento LLM + evaluación | Planned - no topic |
+
+## Topics
+
+| Topic | Title | Status |
+|-------|-------|--------|
+| [`m0-foundations`](m0-foundations/context.md) | M0 — Arranque del repo | In progress |
 
 ## Documents
 
