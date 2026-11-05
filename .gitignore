@@ -1,0 +1,49 @@
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# Secrets (use .env.example)
+.env
+.env.*
+!.env.example
+
+# Raw data (downloaded with `make data-download`)
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Go
+collector/bin/
+forwarder/bin/
+*.test
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+logs/
+
+# Airflow / Metabase local
+airflow/logs/
+metabase/data/
+
+# Claude Code local settings
+.claude/settings.local.json
