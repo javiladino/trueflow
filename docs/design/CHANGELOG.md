@@ -4,6 +4,9 @@ Newest first. One `##` heading per day with activity. Write outcomes, not implem
 
 ## 2026-11-06
 
+### m0-foundations — plan
+- Plan de M0 en 6 fases (docs, tooling, Terraform, acceso AWS, apply, CI); autenticación con IAM Identity Center; Bedrock confirmado por el usuario en el Free plan.
+
 ### m0-foundations — decisión de arquitectura
 - El usuario eligió P2b (lakehouse en S3 con Athena + Glue + Iceberg, sin Kinesis/Firehose/Redshift) por Free plan, proyecto efímero y Firehose bloqueado.
 - CLAUDE.md reescrito: arquitectura, stack, RGPD, roadmap y un único flujo RePPIT en `docs/design/`; nueva sección de memoria de diseño basada en `design-memory`; eliminadas las secciones duplicadas y la ruta `specs/`.

@@ -21,12 +21,12 @@ Load by task, not all at once.
 ## Active Context
 
 **Load order:** this file → `<topic>/context.md` of the active topic → the files its document map marks `always` → only the files the task names. Never load `CHANGELOG.md`, `evidence/`, `archive/`, or a whole folder unless the task names the file.
-**Active topics:** `m0-foundations` (Propose cerrado; siguiente: Plan).
+**Active topics:** `m0-foundations` (Plan redactado; pendiente 🚦).
 **Known findings:** `findings.md` — 4 entries, last 2026-11-06. Open it only when the task touches a subject it covers.
 
 **Current state (2026-11-06):** Rama `feat/001-m0-foundations`. Arquitectura elegida: ruling "Arquitectura lakehouse (P2b)"; CLAUDE.md, README, diagramas y ADR 0001 reescritos en consecuencia. Cuenta AWS en Free plan; nada desplegado.
 
-**Next up:** `reppit-plan` de M0 → 🚦.
+**Next up:** aprobación del plan → `reppit-implement` (fases 1–3 sin AWS).
 **Known issues:** Go, Terraform y AWS CLI no instalados en local; sin verificar `dbt snapshot`/unit tests en `dbt-athena` y Bedrock en el Free plan.
 
 ## Conventions
