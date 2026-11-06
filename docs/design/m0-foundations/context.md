@@ -7,25 +7,23 @@
 
 Hito M0 (CLAUDE.md §12): arranque del repo — tooling (uv, ruff, mypy, Go, Terraform), pre-commit, esqueleto de CI
 en GitHub Actions con OIDC, backend remoto de Terraform (S3 + locking) y alarma de AWS Budgets.
-Restricción: nada facturable en AWS sin confirmación explícita (CLAUDE.md §11). Fase actual: Research.
+Restricciones: nada facturable en AWS sin confirmación explícita (CLAUDE.md §12); cuenta en Free plan; 25 USD/mes. Fase actual: Plan (Propose cerrado).
 
 ## Rulings
 
 - **Raíz de diseño (Javier, 2026-11-05 16:45):** Verdict: per project CONTEXT Conventions ("Raíz de diseño").
+- **Arquitectura (Javier, 2026-11-06 10:00):** Verdict: per project CONTEXT Conventions ("Arquitectura lakehouse (P2b)"). Topic detail: M0 prepara bootstrap del bucket de estado, backend `use_lockfile`, rol OIDC con `sub` inmutable y budget; no crea recursos de datos.
+- **Presupuesto (Javier, 2026-11-05 18:00):** budget mensual de 25 USD con alertas por email; el email va en `*.tfvars` local, no en el repo.
 
 ## Journal (newest first)
 
-**2026-11-05 (4):** `working/proposal.md` con 3 propuestas (AWS completo / lakehouse Athena / local-first); recomendada P1. Pendiente la elección del usuario.
+**2026-11-06:** El usuario eligió P2b. Decision registrada; ruling de arquitectura en CONTEXT; CLAUDE.md (§3–13 reescritos y memoria de diseño apuntando a `design-memory`), README, diagramas y ADR 0001 actualizados; `findings.md` creado con 4 hechos. Close-out: ver CHANGELOG.
 
-**2026-11-05 (3):** Respuestas del usuario en research §15: presupuesto de 25 USD/mes, versiones estables consultadas, checks de CI obligatorios. Pendientes los datos de la cuenta AWS.
-
-**2026-11-05 (2):** Research de M0 añadido a `working/research.md` §7–14: ninguno de los cinco componentes existe; el repo usa `sub` OIDC inmutable; locking DynamoDB deprecado; Budgets gratis. Pendiente 🚦 del usuario.
-
-**2026-11-05:** Topic abierto. El mapeo inicial de la propuesta (antes `docs/RESEARCH.md`) pasa a `working/research.md`; aún no cubre las decisiones propias de M0. `main` protegida (PR obligatorio, historia lineal).
+**2026-11-05:** Topic abierto; research de M0 (§7–15) con respuestas del usuario (25 USD/mes, versiones, checks obligatorios); 3 propuestas y grill-me (seguir en Free plan → P1 descartada; Firehose bloqueado → P2b).
 
 ## Document map
 
 | File | Role | Load | What it holds |
 |------|------|------|---------------|
-| `working/proposal.md` | draft | always | 3 propuestas de arquitectura bajo 25 USD/mes y Free plan; recomendación y Decision |
-| `working/research.md` | draft | always | Mapeo general (§1–6) y estado de los cimientos de M0 con docs oficiales (§7–14) |
+| `working/proposal.md` | draft | always | Propuestas P1, P2, P2b, P3 bajo 25 USD/mes y Free plan; grill-me y Decision (P2b) |
+| `working/research.md` | draft | always | Mapeo general (§1–6) y estado de los cimientos de M0 con docs oficiales y respuestas del usuario (§7–15) |

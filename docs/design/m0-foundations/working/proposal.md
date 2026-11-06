@@ -189,4 +189,7 @@ Igual que P2 (Athena + Glue Data Catalog + Iceberg + `dbt-athena`), pero el coll
 
 ## Decision
 
-_Pendiente de la elección del usuario._
+- **Chosen:** Proposal 2b: Lakehouse en S3 sin Firehose
+- **Reason (the user's):** "Este proyecto es educativo y será desmantelado después de ser implementado. Es solo para tenerlo activo durante las próximas semanas. Athena y Glue sí abren en el free plan. Firehose exige hacer el upgrade." → "elijo P2b".
+- **Date:** 2026-11-06
+- **Ruling:** CONTEXT § Conventions "Arquitectura lakehouse (P2b)"; detalle en `docs/adr/0001-lakehouse-on-free-plan.md`.

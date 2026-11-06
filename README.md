@@ -5,7 +5,8 @@ por padrinazgo y publican anuncios de alquiler de temporada, inmobiliario y serv
 Loire-Atlantique (44)**.
 
 > Proyecto portfolio de Data Engineering. Cada decisión técnica se explica, se mide y se documenta.
-> **Estado:** propuesta y arranque del repo (M0). Todavía no hay código ni infraestructura desplegada.
+> **Estado:** arranque del repo (M0), arquitectura aprobada ([ADR 0001](docs/adr/0001-lakehouse-on-free-plan.md)). Todavía no hay código ni infraestructura desplegada.
+> Proyecto educativo: vive unas semanas en una cuenta AWS en Free plan y se desmantela al terminar.
 
 ## Qué resuelve
 
@@ -17,13 +18,15 @@ de eventos hasta los dashboards y las funcionalidades con IA.
 ```mermaid
 flowchart LR
     SIM[Simulador] --> APIGW[API Gateway] --> COL[Collector Go]
-    COL -->|válidos| KDS[Kinesis] --> FH[Firehose] --> RAW[(S3 raw)]
+    COL -->|válidos, por lotes| RAW[(S3 raw)]
     COL -->|inválidos| Q[(Quarantine + DLQ)]
-    KDS --> AMP[Amplitude]
+    RAW -->|ObjectCreated| FWD[Forwarder] --> AMP[Amplitude]
     SRC[DATAtourisme · DVF] --> BI[Lambda batch] --> RAW
-    RAW --> AF[Airflow + dbt] --> RS[(Redshift Serverless)]
-    RS --> MB[Metabase]
-    RS --> AI[Módulo IA]
+    AF[Airflow + dbt-athena] --> ATH[Athena + Glue]
+    ATH --> RAW
+    ATH --> ICE[(Iceberg en S3)]
+    ATH --> MB[Metabase]
+    ATH --> AI[Módulo IA]
     AF --> DD[Datadog]
 ```
 
@@ -43,13 +46,14 @@ No se hace scraping de ninguna plataforma.
 
 ## Stack
 
-AWS (eu-west-3): API Gateway, Lambda, Kinesis + Firehose, S3, SQS, EventBridge, Redshift Serverless,
-Secrets Manager, Bedrock · Terraform · Go · Python 3.12 + uv · dbt-redshift · Airflow 3.x · Metabase ·
+AWS (eu-west-3, Free plan): API Gateway, Lambda, S3, SQS, EventBridge, Athena, Glue Data Catalog, Iceberg,
+Secrets Manager, Budgets, Bedrock · Terraform · Go · Python 3.12 + uv · dbt-athena · Airflow 3.x · Metabase ·
 Datadog · Amplitude · GitHub Actions (OIDC).
 
 ## Principios
 
-- **ELT** con raw inmutable y re-procesable; transformaciones en dbt (staging → intermediate → marts).
+- **Lakehouse**: raw inmutable en S3 y transformaciones con dbt sobre Athena en tablas Iceberg (staging → intermediate → marts).
+- **Coste acotado**: solo servicios del Free plan y presupuesto de 25 USD/mes con alertas.
 - **At-least-once** con deduplicación por `event_id`; eventos tardíos con ventana de lookback.
 - **RGPD por diseño**: seudonimización HMAC en el collector, minimización, retención y derecho de supresión auditado.
 - **SLOs medidos**: disponibilidad, tasa de error, latencia p50/p95, freshness y coste en `mart_pipeline_slo` y Datadog.
@@ -59,13 +63,14 @@ Datadog · Amplitude · GitHub Actions (OIDC).
 | Hito | Contenido |
 |---|---|
 | M0 | Tooling, pre-commit, CI, backend Terraform, alarma de presupuesto |
-| M1 | Ingesta batch DATAtourisme + DVF → Redshift raw → staging dbt |
-| M2 | Tracking plan + collector Go + Kinesis/Firehose, DLQ/quarantine |
-| M3 | DAGs Airflow, calidad de datos, marts |
+| M1 | Ingesta batch DATAtourisme + DVF → S3 raw → Athena → staging dbt |
+| M2 | Tracking plan + collector Go → S3 raw, DLQ/quarantine |
+| M3 | DAGs Airflow, compactación Iceberg, calidad de datos, marts |
 | M4 | Dashboards Metabase + forwarder Amplitude |
 | M5 | Observabilidad: Datadog como código, runbooks |
 | M6 | RGPD: DAG de supresión, retención |
 | M7 | Módulo IA con evaluación offline |
+| Cierre | Desmantelamiento de todos los recursos de AWS |
 
 ## Comandos (previstos)
 

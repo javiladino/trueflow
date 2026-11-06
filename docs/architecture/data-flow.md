@@ -1,6 +1,7 @@
 # Flujo de datos — trueflow
 
-Recorrido del dato desde la fuente hasta el consumo. Fuente: `CLAUDE.md` §2, §3, §5, §8. Estado: **propuesta**.
+Recorrido del dato desde la fuente hasta el consumo. Fuente: `CLAUDE.md` §2, §3, §5, §9; ADR [0001](../adr/0001-lakehouse-on-free-plan.md).
+Estado: **propuesta aprobada**. Los nombres de modelos intermedios son orientativos hasta las propuestas de M1–M3.
 
 ## 1. Linaje por capas
 
@@ -19,25 +20,25 @@ flowchart LR
         S3V["dvf/"]
     end
 
-    subgraph rawschema["Redshift · raw"]
+    subgraph rawschema["Glue · raw (tablas externas)"]
         RE["raw.events"]
         RD["raw.datatourisme_*"]
         RV["raw.dvf_*"]
     end
 
-    subgraph stg["staging (1:1, cast, dedupe)"]
+    subgraph stg["staging · Iceberg (1:1, cast, dedupe)"]
         SE["stg_tracking__events<br/>dedupe event_id"]
         SD["stg_datatourisme__listings"]
         SV["stg_dvf__mutations"]
     end
 
-    subgraph int["intermediate"]
+    subgraph int["intermediate · Iceberg"]
         IS["int_sessions"]
         IF["int_sponsorship_steps"]
         IP["int_price_per_m2"]
     end
 
-    subgraph marts["marts"]
+    subgraph marts["marts · Iceberg"]
         FE["fct_events"]
         FS["fct_sessions"]
         DL["dim_listing (SCD2)"]
@@ -50,7 +51,7 @@ flowchart LR
     end
 
     subgraph use["Consumo"]
-        MBS["Metabase"]
+        MBS["Metabase (Athena)"]
         AI["Módulo IA"]
         DDS["Datadog"]
     end
@@ -77,7 +78,7 @@ flowchart LR
     MS --> DDS
 ```
 
-## 2. Secuencia de un evento (camino caliente)
+## 2. Secuencia de un evento
 
 ```mermaid
 sequenceDiagram
@@ -85,15 +86,14 @@ sequenceDiagram
     participant C as Simulador
     participant G as API Gateway
     participant L as Collector (Go)
-    participant K as Kinesis
-    participant F as Firehose
     participant S as S3 raw
     participant Q as S3 quarantine / DLQ
+    participant FW as Forwarder
     participant A as Amplitude
     participant AF as Airflow
-    participant R as Redshift
+    participant AT as Athena + Glue
 
-    C->>G: POST /events (JSON)
+    C->>G: POST /events (lote JSON)
     G->>L: invoke
     L->>L: validar JSON Schema, rechazar campos desconocidos
     alt inválido
@@ -101,14 +101,14 @@ sequenceDiagram
         L-->>C: 400
     else válido
         L->>L: enriquecer (received_at) + HMAC-SHA256 user_id/email
-        L->>K: PutRecord
+        L->>S: PutObject events/dt=/hour=/<uuid>.json
         L-->>C: 202
-        K->>F: stream
-        F->>S: buffer → objeto en dt=/hour=/
-        K->>A: forwarder (lotes)
+        S->>FW: s3:ObjectCreated
+        FW->>A: envío por lotes
     end
-    AF->>R: COPY con manifest (idempotente)
-    AF->>R: dbt build (dedupe event_id, lookback received_at)
+    AF->>AT: registrar partición dt/hour (idempotente)
+    AF->>AT: dbt build (dedupe event_id, lookback received_at)
+    AF->>AT: OPTIMIZE / compactación Iceberg
 ```
 
 ## 3. Camino batch (diario)
@@ -121,15 +121,15 @@ sequenceDiagram
     participant DT as DATAtourisme / DVF
     participant S as S3 raw
     participant AF as Airflow
-    participant R as Redshift
+    participant AT as Athena + Glue
 
     EB->>BI: cron diario
     BI->>DT: descarga (API key de Secrets Manager)
     BI->>BI: excluir contactos profesionales (RGPD)
     BI->>S: escribir partición dt=YYYY-MM-DD
-    AF->>R: COPY → raw
-    AF->>R: dbt snapshot (SCD2 dim_listing) + dbt build + tests
-    AF->>R: checks de freshness (< 26 h)
+    AF->>AT: registrar partición en raw
+    AF->>AT: dbt snapshot (SCD2 dim_listing) + dbt build + tests
+    AF->>AT: checks de freshness (< 26 h)
 ```
 
 ## 4. Controles RGPD en el flujo
@@ -139,5 +139,5 @@ sequenceDiagram
 | Collector | HMAC-SHA256 de `user_id`/email/nombre; rechazo de campos fuera del tracking plan |
 | Batch ingest | Exclusión de teléfonos/emails de profesionales; `host_name`/`reviewer_name` eliminados |
 | S3 | Lifecycle: raw 13 meses, quarantine 30 días |
-| Redshift | DAG de supresión sobre `gdpr_erasure_requests`, auditado; reescritura de particiones S3 |
-| Consumo | Metabase solo lectura sobre `marts`; texto a LLM sin PII |
+| Iceberg | DAG de supresión: `DELETE` vía Athena sobre `gdpr_erasure_requests` + expiración de snapshots; reescritura de objetos raw; auditado |
+| Consumo | Metabase solo lectura sobre la base `marts`; texto a LLM sin PII |

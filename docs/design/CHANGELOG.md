@@ -2,6 +2,16 @@
 
 Newest first. One `##` heading per day with activity. Write outcomes, not implementation steps. This file is appended to, never rewritten, and is not loaded by default.
 
+## 2026-11-06
+
+### m0-foundations — decisión de arquitectura
+- El usuario eligió P2b (lakehouse en S3 con Athena + Glue + Iceberg, sin Kinesis/Firehose/Redshift) por Free plan, proyecto efímero y Firehose bloqueado.
+- CLAUDE.md reescrito: arquitectura, stack, RGPD, roadmap y un único flujo RePPIT en `docs/design/`; nueva sección de memoria de diseño basada en `design-memory`; eliminadas las secciones duplicadas y la ruta `specs/`.
+- ADR 0001, README, diagramas y `findings.md` (4 hechos) creados o actualizados.
+
+### Files (trueflow, branch feat/001-m0-foundations)
+- `CLAUDE.md`, `README.md`, `docs/architecture/*.md` (modified); `docs/adr/0001-lakehouse-on-free-plan.md`, `docs/design/findings.md` (new)
+
 ## 2026-11-05
 
 ### m0-foundations — propose
