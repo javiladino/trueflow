@@ -133,6 +133,36 @@ En AWS solo queda lo barato y demostrable: API Gateway, el Lambda collector, S3,
 ### Respuestas del usuario (grill-me)
 
 - Plan de la cuenta AWS → seguir en Free plan (decisión del usuario, 2026-11-05). Consecuencia: P1 queda descartada porque Kinesis Data Streams no está en el Free Tier y la prueba de Redshift "is not part of the AWS Free Tier"; quedan P2 (si Athena y Firehose están permitidos) y P3. La cuenta se cierra en 6 meses como máximo.
+- Vida del proyecto → unas semanas; se desmantela al terminar (usuario, 2026-11-06). Consecuencia: el cierre del Free plan a los 6 meses deja de ser un riesgo.
+- Disponibilidad en el Free plan → comprobada por el usuario en la consola (2026-11-06): **Athena y Glue abren; Amazon Data Firehose exige pasar a Paid plan**. Consecuencia: P2 solo es viable sin Firehose (variante P2b).
+
+## Proposal 2b: Lakehouse en S3 sin Firehose (variante de P2 para el Free plan)
+
+### Overview
+Igual que P2 (Athena + Glue Data Catalog + Iceberg + `dbt-athena`), pero el collector escribe directamente en S3 en lugar de pasar por Firehose. Usa solo servicios que el usuario ha visto abiertos en el Free plan, más Lambda, API Gateway y S3.
+
+### Key Changes
+| Component | Change |
+|-----------|--------|
+| Collector (Go) | Modified: escribe objetos JSON por lotes en `s3://<bucket>/events/dt=YYYY-MM-DD/hour=HH/` con `PutObject` |
+| Kinesis + Firehose | Removed |
+| Forwarder a Amplitude | Modified: se dispara con notificaciones de S3 (`s3:ObjectCreated`) |
+| Warehouse | Athena + Glue + Iceberg, `dbt-athena` (como P2) |
+| CLAUDE.md §3, §5 y docs/adr | Modified: ADR por cambio de streaming y de warehouse |
+
+### Trade-offs
+| Benefit | Risk |
+|---------|------|
+| Cabe en el Free plan sin upgrade (comprobación del usuario en la consola) | Sin buffer de streaming: cada invocación escribe en S3; hay que agrupar eventos en el collector o crear muchos objetos pequeños |
+| Coste de céntimos (Athena, ejemplo de 5 USD/TB escaneado) | Muchos ficheros pequeños hacen más lentas las consultas de Athena; hace falta compactar (Iceberg `OPTIMIZE`) |
+| Iceberg da MERGE y DELETE por fila para la supresión RGPD | Mismos puntos sin verificar que P2: `dbt snapshot` y unit tests en `dbt-athena` |
+| Desmontaje simple: `terraform destroy` + vaciar buckets | Se pierde la parte de Kinesis del relato; hay que contarlo como trade-off de coste en el ADR |
+
+### Validation
+1. `curl -X POST <api>/events` → 202 y un objeto nuevo bajo `events/dt=.../hour=.../`.
+2. `dbt debug` con `dbt-athena` contra el workgroup; `dbt snapshot` sobre Iceberg crea `dbt_valid_from`/`dbt_valid_to`.
+3. Una query de Athena sobre `raw.events` devuelve el evento enviado; el `event_id` duplicado aparece una sola vez en staging.
+4. Cost Explorer < 5 USD/mes.
 
 ## Recommendation
 
@@ -153,7 +183,9 @@ En AWS solo queda lo barato y demostrable: API Gateway, el Lambda collector, S3,
 
 **Recomendación inicial (antes de la respuesta del usuario): Proposal 1**, con Kinesis detrás de `enable_streaming` (apagado por defecto) y la prueba de Redshift activada al empezar M1. Es la única sin impacto en las fases posteriores y con el relato completo de la entrevista. El presupuesto de 25 USD se protege con el budget de M0 y con el crédito de 170 USD, que se conserva al pasar a Paid plan.
 
-**Recomendación revisada tras seguir en Free plan: Proposal 3**, porque solo usa servicios básicos (Lambda, API Gateway, S3), que es lo que con más probabilidad permite el Free plan. P2 solo si se confirma en la consola que Athena y Firehose están disponibles.
+**Recomendación revisada tras seguir en Free plan: Proposal 3** (superada por la siguiente), porque solo usa servicios básicos (Lambda, API Gateway, S3), que es lo que con más probabilidad permite el Free plan. P2 solo si se confirma en la consola que Athena y Firehose están disponibles.
+
+**Recomendación final (2026-11-06): Proposal 2b.** Cumple las tres restricciones del usuario (Free plan, 25 USD/mes y vida de semanas), solo usa servicios comprobados en la consola y conserva un warehouse en AWS con SQL, dbt, SCD2 y un borrado RGPD sólido, que P3 no tiene. P3 sigue siendo la opción más simple si prima terminar rápido.
 
 ## Decision
 
