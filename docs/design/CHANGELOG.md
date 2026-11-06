@@ -4,6 +4,9 @@ Newest first. One `##` heading per day with activity. Write outcomes, not implem
 
 ## 2026-11-06
 
+### m0-foundations — evidencia
+- `evidence/` con citas de la documentación oficial y las comprobaciones de consola del owner; procedencia de findings actualizada.
+
 ### m0-foundations — plan
 - Plan de M0 en 6 fases (docs, tooling, Terraform, acceso AWS, apply, CI); autenticación con IAM Identity Center; Bedrock confirmado por el usuario en el Free plan.
 

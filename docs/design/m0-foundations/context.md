@@ -17,6 +17,8 @@ Restricciones: nada facturable en AWS sin confirmación explícita (CLAUDE.md §
 
 ## Journal (newest first)
 
+**2026-11-06 (3):** Creada `evidence/` con las citas de la doc oficial y las comprobaciones de consola del owner; `findings.md` apunta a ellas como procedencia.
+
 **2026-11-06 (2):** `working/plan.md` con 6 fases y 14 checks. Grill-me: autenticación local → IAM Identity Center. El usuario confirmó que Bedrock está en el Free plan (se aplica en la fase 1).
 
 **2026-11-06:** El usuario eligió P2b. Decision registrada; ruling de arquitectura en CONTEXT; CLAUDE.md (§3–13 reescritos y memoria de diseño apuntando a `design-memory`), README, diagramas y ADR 0001 actualizados; `findings.md` creado con 4 hechos. Close-out: ver CHANGELOG.
@@ -27,6 +29,8 @@ Restricciones: nada facturable en AWS sin confirmación explícita (CLAUDE.md §
 
 | File | Role | Load | What it holds |
 |------|------|------|---------------|
+| `evidence/official-docs-2026-11.md` | reference | on-demand | Citas literales y URLs de la doc oficial (AWS, Terraform, GitHub, pre-commit) |
+| `evidence/owner-console-checks-2026-11-06.md` | reference | on-demand | Comprobaciones del owner en la consola: Athena, Glue, Bedrock sí; Firehose no |
 | `working/plan.md` | draft | always | Plan de M0: 6 fases, ficheros, 14 checks para reppit-test |
 | `working/proposal.md` | draft | on-demand | Propuestas P1, P2, P2b, P3 bajo 25 USD/mes y Free plan; grill-me y Decision (P2b) |
 | `working/research.md` | draft | on-demand | Mapeo general (§1–6) y estado de los cimientos de M0 con docs oficiales y respuestas del usuario (§7–15) |
